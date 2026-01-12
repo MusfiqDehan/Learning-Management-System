@@ -40,7 +40,7 @@ This Django application provides functionality for managing courses, lessons, an
 
 -   **Frontend:** HTML5, CSS3, Bootstrap5
 -   **Backend:** Python=3.12.3, Django=5.0.6
--   **Database:** SQLite3
+-   **Database:** PostgreSQL, Neon
 -   **Version Control:** Git, GitHub
 -   **Editor:** VS Code
 -   **Operating System:** Ubuntu 24.04 LTS
@@ -50,7 +50,7 @@ This Django application provides functionality for managing courses, lessons, an
 #### Installation Steps
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/musfiqdehan/config.git
+   git clone https://github.com/MusfiqDehan/Learning-Management-System.git
    cd your-project
    ```
 
