@@ -1,34 +1,119 @@
 {% extends 'base.html' %}
 
-{% load socialaccount %} <!-- Add this line -->
+{% load socialaccount %}
 
 {% block content %}
-  <h2>Sign Up as an Instructor</h2>
-  <form class="my-3" method="post" action="{% url 'instructor_signup' %}">
-    {% csrf_token %}
-    <div class="mb-3">
-      <label for="username" class="form-label">Username</label>
-      <input type="text" class="form-control" name="username" id="username" aria-describedby="username" />
-    </div>
-    <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" name="email" id="email" aria-describedby="email" />
-    </div>
-    <div class="mb-3">
-      <label for="password1" class="form-label">Password</label>
-      <input type="password" class="form-control" name="password1" id="password1" />
-    </div>
-    <div class="mb-3">
-      <label for="password2" class="form-label">Confirm Password</label>
-      <input type="password" class="form-control" name="password2" id="password2" />
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+  <div class="min-h-[600px] flex items-center justify-center">
+    <div class="w-full max-w-md">
+      <!-- Signup Card -->
+      <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-purple-500 to-pink-500 p-8 text-center text-white">
+          <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-chalkboard-teacher text-4xl"></i>
+          </div>
+          <h2 class="font-display font-bold text-3xl mb-2">Join as an Instructor</h2>
+          <p class="text-purple-100">Share your knowledge with the world</p>
+        </div>
 
-  <p>
-    Already have an account? <a href="{% url 'login' %}">Log in</a>
-  </p>
-  <p>
-    Are you a student? <a href="{% url 'student_signup' %}">Sign up as a student</a>
-  </p>
+        <!-- Form -->
+        <div class="p-8">
+          <form method="post" action="{% url 'instructor_signup' %}" class="space-y-5">
+            {% csrf_token %}
+
+            <!-- Username Field -->
+            <div>
+              <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">
+                <i class="fas fa-user text-purple-600 mr-2"></i>Username
+              </label>
+              <input 
+                type="text" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none" 
+                name="username" 
+                id="username" 
+                placeholder="Choose a username"
+                required
+              />
+            </div>
+
+            <!-- Email Field -->
+            <div>
+              <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+                <i class="fas fa-envelope text-purple-600 mr-2"></i>Email Address
+              </label>
+              <input 
+                type="email" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none" 
+                name="email" 
+                id="email" 
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <!-- Password Field -->
+            <div>
+              <label for="password1" class="block text-sm font-semibold text-gray-700 mb-2">
+                <i class="fas fa-lock text-purple-600 mr-2"></i>Password
+              </label>
+              <input 
+                type="password" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none" 
+                name="password1" 
+                id="password1" 
+                placeholder="Create a password"
+                required
+              />
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div>
+              <label for="password2" class="block text-sm font-semibold text-gray-700 mb-2">
+                <i class="fas fa-lock text-purple-600 mr-2"></i>Confirm Password
+              </label>
+              <input 
+                type="password" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none" 
+                name="password2" 
+                id="password2" 
+                placeholder="Confirm your password"
+                required
+              />
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              class="w-full px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              <i class="fas fa-user-plus mr-2"></i>Create Instructor Account
+            </button>
+          </form>
+
+          <!-- Links -->
+          <div class="mt-8 text-center space-y-3">
+            <p class="text-gray-600">
+              Already have an account? 
+              <a href="{% url 'login' %}" class="text-purple-600 hover:text-purple-700 font-semibold hover:underline">
+                Log in
+              </a>
+            </p>
+            <p class="text-gray-600">
+              Are you a student? 
+              <a href="{% url 'student_signup' %}" class="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
+                Sign up as a student
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back to Home -->
+      <div class="text-center mt-6">
+        <a href="{% url 'course_list' %}" class="text-gray-600 hover:text-gray-800 font-medium">
+          <i class="fas fa-arrow-left mr-2"></i>Back to Home
+        </a>
+      </div>
+    </div>
+  </div>
 {% endblock %}

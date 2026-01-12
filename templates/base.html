@@ -1,124 +1,290 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
         {% block title %}
-        Online Learning Platform
+        EduLearn - Online Learning Platform
         {% endblock %}
     </title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;700;900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-
         body {
-            font-family: "Poppins", sans-serif !important;
+            font-family: 'Inter', sans-serif;
         }
-
-        main {
-            padding-top: 150px;
-            padding-bottom: 300px;
+        
+        .font-display {
+            font-family: 'Poppins', sans-serif;
         }
-
-        h1,
-        h2,
-        h3,
-        .nav-link {
-            font-family: "Roboto", sans-serif !important;
+        
+        /* Custom animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-
-        .logo {
-            font-family: "Anton", sans-serif !important;
+        
+        .animate-fadeInUp {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Smooth transitions */
+        * {
+            transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+        
+        /* Card hover effect */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
     </style>
 </head>
 
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg fixed-top top-0 bg-primary">
-            <div class="container">
-                <a class="navbar-brand logo fs-3 text-white" href="{% url 'course_list' %}">Online Learning Platform</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        {% if user.is_authenticated %}
-                            {% if user.is_instructor %}
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="{% url 'course_list' %}" class="flex items-center space-x-3 group">
+                        <div class="bg-gradient-primary rounded-lg p-2 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                        </div>
+                        <span class="font-display font-bold text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            EduLearn
+                        </span>
+                    </a>
+                </div>
 
-                            <li class="nav-item">
-                                <a class="nav-link fs-5 text-white" href="{% url 'course_create' %}">Create Course</a>
-                            </li>
-                            {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link fs-5 text-white" href="{% url 'logout' %}">LogOut</a>
-                        </li>
-                        {% else %}
-
-                        <li class="nav-item">
-                            <a class="nav-link fs-5 text-white" aria-current="page"
-                                href="{% url 'course_list' %}">Courses</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link fs-5 text-white" aria-current="page"
-                                href="{% url 'student_signup' %}">Register as Student</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link fs-5 text-white" aria-current="page"
-                                href="{% url 'instructor_signup' %}">Register as Instructor</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link fs-5 text-white" aria-current="page" href="{% url 'login' %}">Login</a>
-                        </li>
-
-                        {% endif %}
-                    </ul>
-
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-1">
                     {% if user.is_authenticated %}
-                    <span class="nav-link fs-5 text-white">Welcome, {{ user.username }}</span>
+                        <a href="{% url 'course_list' %}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium transition-all">
+                            <i class="fas fa-home mr-2"></i>Courses
+                        </a>
+                        {% if user.is_instructor %}
+                        <a href="{% url 'course_create' %}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium transition-all">
+                            <i class="fas fa-plus-circle mr-2"></i>Create Course
+                        </a>
+                        {% endif %}
+                        <div class="h-8 w-px bg-gray-300 mx-2"></div>
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center space-x-2 px-4 py-2 bg-blue-50 rounded-lg">
+                                <div class="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
+                                    <span class="text-white font-semibold text-sm">{{ user.username|slice:":1"|upper }}</span>
+                                </div>
+                                <span class="text-gray-700 font-medium">{{ user.username }}</span>
+                            </div>
+                            <a href="{% url 'logout' %}" class="px-4 py-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 font-medium transition-all">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </a>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'course_list' %}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium transition-all">
+                            <i class="fas fa-book mr-2"></i>Courses
+                        </a>
+                        <a href="{% url 'student_signup' %}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium transition-all">
+                            <i class="fas fa-user-graduate mr-2"></i>Student Signup
+                        </a>
+                        <a href="{% url 'instructor_signup' %}" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-all">
+                            <i class="fas fa-chalkboard-teacher mr-2"></i>Instructor Signup
+                        </a>
+                        <a href="{% url 'login' %}" class="px-6 py-2 rounded-lg bg-gradient-primary text-white font-semibold hover:shadow-lg transition-all">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login
+                        </a>
                     {% endif %}
                 </div>
+
+                <!-- Mobile menu button -->
+                <div class="flex items-center md:hidden">
+                    <button type="button" id="mobile-menu-button" class="text-gray-700 hover:text-blue-600 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
             </div>
-        </nav>
-    </header>
+        </div>
 
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+            <div class="px-4 pt-2 pb-4 space-y-2">
+                {% if user.is_authenticated %}
+                    <div class="flex items-center space-x-2 px-4 py-3 bg-blue-50 rounded-lg mb-3">
+                        <div class="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
+                            <span class="text-white font-semibold">{{ user.username|slice:":1"|upper }}</span>
+                        </div>
+                        <span class="text-gray-700 font-medium">{{ user.username }}</span>
+                    </div>
+                    <a href="{% url 'course_list' %}" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium">
+                        <i class="fas fa-home mr-2"></i>Courses
+                    </a>
+                    {% if user.is_instructor %}
+                    <a href="{% url 'course_create' %}" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium">
+                        <i class="fas fa-plus-circle mr-2"></i>Create Course
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'logout' %}" class="block px-4 py-3 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 font-medium">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </a>
+                {% else %}
+                    <a href="{% url 'course_list' %}" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium">
+                        <i class="fas fa-book mr-2"></i>Courses
+                    </a>
+                    <a href="{% url 'student_signup' %}" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium">
+                        <i class="fas fa-user-graduate mr-2"></i>Student Signup
+                    </a>
+                    <a href="{% url 'instructor_signup' %}" class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium">
+                        <i class="fas fa-chalkboard-teacher mr-2"></i>Instructor Signup
+                    </a>
+                    <a href="{% url 'login' %}" class="block px-4 py-3 rounded-lg bg-gradient-primary text-white font-semibold text-center">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
 
-
-
-    <main class="container">
-        {% if messages %}
-        <ul class="messages z-3">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    <!-- Main Content -->
+    <main class="flex-grow pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Messages -->
+            {% if messages %}
+            <div class="mb-6 space-y-3">
+                {% for message in messages %}
+                <div class="animate-fadeInUp rounded-lg p-4 shadow-md {% if message.tags == 'success' %}bg-green-50 border-l-4 border-green-500 text-green-800{% elif message.tags == 'error' %}bg-red-50 border-l-4 border-red-500 text-red-800{% elif message.tags == 'warning' %}bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800{% else %}bg-blue-50 border-l-4 border-blue-500 text-blue-800{% endif %}">
+                    <div class="flex items-center">
+                        <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %} mr-3"></i>
+                        <span class="font-medium">{{ message }}</span>
+                    </div>
+                </div>
                 {% endfor %}
-        </ul>
-        {% endif %}
+            </div>
+            {% endif %}
 
-        {% block content %}
-
-        {% endblock %}
+            {% block content %}
+            {% endblock %}
+        </div>
     </main>
 
-    <footer class="bg-primary text-white text-center align-middle py-4 bottom-0 w-100">
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Brand -->
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="bg-gradient-primary rounded-lg p-2">
+                            <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                        </div>
+                        <span class="font-display font-bold text-2xl">EduLearn</span>
+                    </div>
+                    <p class="text-gray-400 mb-4 max-w-md">
+                        Empowering learners worldwide with quality online education. Join thousands of students and instructors in our learning community.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-400 transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
 
-        <p>&copy;2024 Online Learning Platform</p>
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'course_list' %}" class="text-gray-400 hover:text-white transition-colors">Courses</a></li>
+                        <li><a href="{% url 'student_signup' %}" class="text-gray-400 hover:text-white transition-colors">Become a Student</a></li>
+                        <li><a href="{% url 'instructor_signup' %}" class="text-gray-400 hover:text-white transition-colors">Teach on EduLearn</a></li>
+                    </ul>
+                </div>
 
+                <!-- Support -->
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 EduLearn - Online Learning Platform. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <!-- Mobile Menu Toggle Script -->
+    <script>
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
 </body>
 
 </html>

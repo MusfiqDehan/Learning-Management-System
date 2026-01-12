@@ -1,22 +1,86 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>{{ course.title }} - Lessons</h1>
-  {% if user == course.instructor %}
-    <a href="{% url 'lesson_create' course.pk %}">Add New Lesson</a>
-  {% endif %}
-  <ul>
-    {% for lesson in lessons %}
-      <li>
-        <a href="{% url 'lesson_detail' course.pk lesson.pk %}">{{ lesson.title }}</a>
+  <div class="max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+      <div class="flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <div class="flex items-center text-sm text-gray-500 mb-2">
+            <a href="{% url 'course_list' %}" class="hover:text-blue-600">
+              <i class="fas fa-home mr-1"></i>Courses
+            </a>
+            <i class="fas fa-chevron-right mx-2"></i>
+            <a href="{% url 'course_detail' course.pk %}" class="hover:text-blue-600">
+              {{ course.title }}
+            </a>
+            <i class="fas fa-chevron-right mx-2"></i>
+            <span class="text-gray-700">Lessons</span>
+          </div>
+          <h1 class="font-display font-bold text-3xl md:text-4xl text-gray-800">
+            <i class="fas fa-list text-blue-600 mr-3"></i>Course Lessons
+          </h1>
+          <p class="text-gray-600 mt-2">{{ course.title }}</p>
+        </div>
+
         {% if user == course.instructor %}
-          <a href="{% url 'lesson_update' course.pk lesson.pk %}">Edit</a>
-          <a href="{% url 'lesson_delete' course.pk lesson.pk %}">Delete</a>
+        <a href="{% url 'lesson_create' course.pk %}" class="px-6 py-3 bg-gradient-primary text-white rounded-xl font-semibold hover:shadow-lg transition-all">
+          <i class="fas fa-plus-circle mr-2"></i>Add New Lesson
+        </a>
         {% endif %}
-      </li>
-    {% empty %}
-      <li>No lessons available for this course.</li>
-    {% endfor %}
-  </ul>
-  <a href="{% url 'course_detail' course.pk %}">Back to Course</a>
+      </div>
+    </div>
+
+    <!-- Lessons List -->
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      {% if lessons %}
+        <div class="space-y-3">
+          {% for lesson in lessons %}
+            <div class="group border border-gray-200 rounded-xl p-5 hover:border-blue-300 hover:shadow-md transition-all">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <a href="{% url 'lesson_detail' course.pk lesson.pk %}" class="block">
+                    <h3 class="font-bold text-lg text-gray-800 group-hover:text-blue-600 transition-colors mb-2">
+                      <i class="fas fa-play-circle text-blue-500 mr-2"></i>{{ lesson.title }}
+                    </h3>
+                  </a>
+                </div>
+
+                {% if user == course.instructor %}
+                  <div class="flex gap-2 ml-4">
+                    <a href="{% url 'lesson_update' course.pk lesson.pk %}" class="px-3 py-2 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition-colors">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="{% url 'lesson_delete' course.pk lesson.pk %}" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-center py-12">
+          <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-folder-open text-gray-400 text-3xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-700 mb-2">No Lessons Yet</h3>
+          <p class="text-gray-500 mb-6">This course doesn't have any lessons yet.</p>
+          {% if user == course.instructor %}
+            <a href="{% url 'lesson_create' course.pk %}" class="inline-block px-6 py-3 bg-gradient-primary text-white rounded-xl font-semibold hover:shadow-lg transition-all">
+              Create First Lesson
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <!-- Back to Course -->
+      <div class="mt-8 pt-6 border-t border-gray-200">
+        <a href="{% url 'course_detail' course.pk %}" class="inline-flex items-center px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
+          <i class="fas fa-arrow-left mr-2"></i>Back to Course
+        </a>
+      </div>
+    </div>
+  </div>
 {% endblock %}

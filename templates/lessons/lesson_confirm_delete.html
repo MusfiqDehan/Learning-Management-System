@@ -1,11 +1,56 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Delete Lesson</h1>
-  <p>Are you sure you want to delete the lesson "{{ lesson.title }}"?</p>
-  <form method="post">
-    {% csrf_token %}
-    <button class="btn btn-danger" type="submit">Confirm Delete</button>
-  </form>
-  <a class="btn btn-secondary" href="{% url 'course_detail' lesson.course.pk %}">Cancel</a>
+  <div class="min-h-[500px] flex items-center justify-center">
+    <div class="w-full max-w-lg">
+      <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Warning Header -->
+        <div class="bg-gradient-to-r from-red-500 to-red-600 p-8 text-center text-white">
+          <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-exclamation-triangle text-4xl"></i>
+          </div>
+          <h2 class="font-display font-bold text-3xl mb-2">Delete Lesson</h2>
+          <p class="text-red-100">This action cannot be undone</p>
+        </div>
+
+        <!-- Content -->
+        <div class="p-8">
+          <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg mb-6">
+            <div class="flex items-start">
+              <i class="fas fa-info-circle text-red-500 text-xl mr-3 mt-1"></i>
+              <div>
+                <p class="text-gray-800 font-semibold mb-2">
+                  Are you sure you want to delete this lesson?
+                </p>
+                <p class="text-gray-700 text-lg font-bold mb-2">
+                  "{{ lesson.title }}"
+                </p>
+                <p class="text-gray-600 text-sm">
+                  Student progress for this lesson will be permanently deleted.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div class="flex gap-4">
+              <button 
+                type="submit" 
+                class="flex-1 px-6 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all duration-300"
+              >
+                <i class="fas fa-trash mr-2"></i>Confirm Delete
+              </button>
+              <a 
+                href="{% url 'course_detail' lesson.course.pk %}" 
+                class="flex-1 px-6 py-4 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors text-center"
+              >
+                <i class="fas fa-times mr-2"></i>Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
