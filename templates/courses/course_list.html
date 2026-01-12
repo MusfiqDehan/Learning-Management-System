@@ -1,43 +1,155 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <style>
-    #courses {
-      text-align: center;
-    }
-  </style>
   <!-- Hero Section -->
-  <section id="hero" class="text-black text-center py-3">
-    <div class="py-3">
-      <h1 class="display-4">Unified Online Learning Management Platform</h1>
-      <p class="lead">Enhance your skills and knowledge with the best courses and instructors available online. Join us today and start your journey towards excellence.</p>
-      <p class="lead">Whether you're a student eager to learn or an instructor ready to teach, we have the right tools for you.</p>
-      <a href="{% url 'student_signup' %}" class="btn btn-primary btn-lg mx-2">Register as a Student</a>
-      <a href="{% url 'instructor_signup' %}" class="btn btn-secondary btn-lg mx-2">Register as an Instructor</a>
+  <section class="relative bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 rounded-3xl overflow-hidden mb-12 shadow-2xl">
+    <div class="absolute inset-0 bg-black opacity-10"></div>
+    <div class="relative z-10 px-6 py-16 md:py-24 text-center text-white">
+      <div class="animate-fadeInUp">
+        <h1 class="font-display font-bold text-4xl md:text-6xl lg:text-7xl mb-6 leading-tight">
+          Transform Your Future with
+          <span class="block mt-2 bg-gradient-to-r from-yellow-200 to-pink-200 bg-clip-text text-transparent">
+            Online Learning
+          </span>
+        </h1>
+        <p class="text-lg md:text-xl lg:text-2xl mb-4 max-w-3xl mx-auto text-blue-50 font-light">
+          Enhance your skills and knowledge with the best courses and instructors available online.
+        </p>
+        <p class="text-base md:text-lg mb-8 max-w-2xl mx-auto text-blue-100">
+          Whether you're a student eager to learn or an instructor ready to teach, we have the right tools for you.
+        </p>
+        
+        {% if not user.is_authenticated %}
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="{% url 'student_signup' %}" class="group px-8 py-4 bg-white text-blue-600 rounded-xl font-semibold text-lg shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center">
+            <i class="fas fa-user-graduate mr-3 text-2xl group-hover:rotate-12 transition-transform"></i>
+            Register as Student
+          </a>
+          <a href="{% url 'instructor_signup' %}" class="group px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center">
+            <i class="fas fa-chalkboard-teacher mr-3 text-2xl group-hover:rotate-12 transition-transform"></i>
+            Register as Instructor
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    
+    <!-- Decorative elements -->
+    <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-32 -mt-32"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-white opacity-5 rounded-full -ml-48 -mb-48"></div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-all">
+        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-book-open text-blue-600 text-3xl"></i>
+        </div>
+        <h3 class="font-bold text-3xl text-gray-800 mb-2">{{ courses|length }}+</h3>
+        <p class="text-gray-600">Available Courses</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-all">
+        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-users text-purple-600 text-3xl"></i>
+        </div>
+        <h3 class="font-bold text-3xl text-gray-800 mb-2">1000+</h3>
+        <p class="text-gray-600">Active Students</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-all">
+        <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-award text-pink-600 text-3xl"></i>
+        </div>
+        <h3 class="font-bold text-3xl text-gray-800 mb-2">500+</h3>
+        <p class="text-gray-600">Certificates Awarded</p>
+      </div>
     </div>
   </section>
 
   <!-- Courses Section -->
-  <section id="courses" class="py-5">
-    <h1 class="mb-4">Our Courses</h1>
-    <div class="row">
+  <section class="mb-12">
+    <div class="text-center mb-10">
+      <h2 class="font-display font-bold text-4xl md:text-5xl text-gray-800 mb-4">
+        Explore Our <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Courses</span>
+      </h2>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+        Discover a wide range of courses designed to help you achieve your learning goals
+      </p>
+    </div>
+
+    {% if courses %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {% for course in courses %}
-        <div class="col-md-3 mb-4">
-          <div class="card h-100">
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover group">
+          <!-- Course Image -->
+          <div class="relative h-48 bg-gradient-to-br from-blue-400 to-purple-500 overflow-hidden">
             {% if course.thumbnail %}
-              <img src="{{ course.thumbnail.url }}" class="card-img-top" alt="{{ course.title }}" />
+              <img src="{{ course.thumbnail.url }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="{{ course.title }}" />
+            {% else %}
+              <div class="w-full h-full flex items-center justify-center">
+                <i class="fas fa-book text-white text-6xl opacity-50"></i>
+              </div>
             {% endif %}
-            <div class="card-body">
-              <h5 class="card-title"><a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a></h5>
-              <p class="card-text text-truncate">{{ course.description }}</p>
-              <p class="card-text">
-                <small class="text-muted">Instructor: {{ course.instructor.username }}</small>
-              </p>
-              <a href="{% url 'course_detail' course.pk %}" class="btn btn-primary">View Course</a>
+            <div class="absolute top-3 right-3 bg-white rounded-full px-3 py-1 shadow-lg">
+              <i class="fas fa-star text-yellow-400"></i>
+              <span class="text-sm font-semibold text-gray-700 ml-1">4.8</span>
             </div>
+          </div>
+
+          <!-- Course Content -->
+          <div class="p-6">
+            <h3 class="font-bold text-xl text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+              {{ course.title }}
+            </h3>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+              {{ course.description }}
+            </p>
+            
+            <!-- Instructor Info -->
+            <div class="flex items-center mb-4 pb-4 border-b border-gray-100">
+              <div class="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center mr-3">
+                <span class="text-white font-semibold text-xs">{{ course.instructor.username|slice:":1"|upper }}</span>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500">Instructor</p>
+                <p class="text-sm font-semibold text-gray-700">{{ course.instructor.username }}</p>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <a href="{% url 'course_detail' course.pk %}" class="block w-full text-center px-4 py-3 bg-gradient-primary text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+              View Course
+              <i class="fas fa-arrow-right ml-2"></i>
+            </a>
           </div>
         </div>
       {% endfor %}
     </div>
+    {% else %}
+    <div class="text-center py-16">
+      <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-book-open text-gray-400 text-4xl"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-700 mb-2">No Courses Available</h3>
+      <p class="text-gray-500 mb-6">Be the first to create a course!</p>
+      {% if user.is_authenticated and user.is_instructor %}
+      <a href="{% url 'course_create' %}" class="inline-block px-8 py-3 bg-gradient-primary text-white rounded-xl font-semibold hover:shadow-lg transition-all">
+        Create Your First Course
+      </a>
+      {% endif %}
+    </div>
+    {% endif %}
   </section>
+
+  <!-- CTA Section -->
+  {% if not user.is_authenticated %}
+  <section class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 md:p-12 text-center text-white shadow-2xl mb-12">
+    <h2 class="font-display font-bold text-3xl md:text-4xl mb-4">Ready to Start Learning?</h2>
+    <p class="text-lg md:text-xl mb-8 text-blue-100">Join thousands of students already learning on our platform</p>
+    <a href="{% url 'student_signup' %}" class="inline-block px-8 py-4 bg-white text-blue-600 rounded-xl font-semibold text-lg shadow-lg hover:shadow-2xl hover:scale-105 transition-all">
+      Get Started Today
+      <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+  </section>
+  {% endif %}
 {% endblock %}

@@ -1,36 +1,137 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="container mt-5">
-    <h1>
-      {% if form.instance.pk %}
-        Edit Course
-      {% else %}
-        Create Course
-      {% endif %}
-    </h1>
-    <form method="post" enctype="multipart/form-data" class="my-3">
-      {% csrf_token %}
-      <div class="mb-3">
-        <label for="{{ form.title.id_for_label }}" class="form-label">Course Title</label>
-        {{ form.title }}
+  <div class="max-w-3xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <!-- Header -->
+      <div class="bg-gradient-primary p-8 text-white">
+        <div class="flex items-center">
+          <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+            <i class="fas {% if form.instance.pk %}fa-edit{% else %}fa-plus-circle{% endif %} text-3xl"></i>
+          </div>
+          <div>
+            <h1 class="font-display font-bold text-3xl">
+              {% if form.instance.pk %}
+                Edit Course
+              {% else %}
+                Create New Course
+              {% endif %}
+            </h1>
+            <p class="text-blue-100 mt-1">
+              {% if form.instance.pk %}
+                Update your course details
+              {% else %}
+                Share your knowledge with students
+              {% endif %}
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="{{ form.description.id_for_label }}" class="form-label">Course Description</label>
-        {{ form.description }}
+
+      <!-- Form -->
+      <div class="p-8">
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+          {% csrf_token %}
+
+          <!-- Course Title -->
+          <div>
+            <label for="{{ form.title.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+              <i class="fas fa-heading text-blue-600 mr-2"></i>Course Title
+            </label>
+            {{ form.title }}
+            {% if form.title.errors %}
+              <div class="mt-2 text-sm text-red-600">
+                {{ form.title.errors }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Course Description -->
+          <div>
+            <label for="{{ form.description.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+              <i class="fas fa-align-left text-blue-600 mr-2"></i>Course Description
+            </label>
+            {{ form.description }}
+            {% if form.description.errors %}
+              <div class="mt-2 text-sm text-red-600">
+                {{ form.description.errors }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Course Thumbnail -->
+          <div>
+            <label for="{{ form.thumbnail.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+              <i class="fas fa-image text-blue-600 mr-2"></i>Course Thumbnail
+            </label>
+            <div class="mt-1 flex items-center">
+              <div class="flex-1">
+                {{ form.thumbnail }}
+              </div>
+            </div>
+            {% if form.thumbnail.errors %}
+              <div class="mt-2 text-sm text-red-600">
+                {{ form.thumbnail.errors }}
+              </div>
+            {% endif %}
+            <p class="mt-2 text-sm text-gray-500">
+              <i class="fas fa-info-circle mr-1"></i>Upload an image that represents your course
+            </p>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex gap-4 pt-6 border-t border-gray-200">
+            <button 
+              type="submit" 
+              class="flex-1 px-8 py-4 bg-gradient-primary text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              <i class="fas {% if form.instance.pk %}fa-save{% else %}fa-plus-circle{% endif %} mr-2"></i>
+              {% if form.instance.pk %}
+                Update Course
+              {% else %}
+                Create Course
+              {% endif %}
+            </button>
+            <a 
+              href="{% url 'course_list' %}" 
+              class="px-8 py-4 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors text-center"
+            >
+              <i class="fas fa-times mr-2"></i>Cancel
+            </a>
+          </div>
+        </form>
       </div>
-      <div class="mb-3">
-        <label for="{{ form.thumbnail.id_for_label }}" class="form-label">Course Thumbnail</label>
-        {{ form.thumbnail }}
-      </div>
-      <button type="submit" class="btn btn-primary">
-        {% if form.instance.pk %}
-          Update
-        {% else %}
-          Create
-        {% endif %}Course
-      </button>
-    </form>
-    <a href="{% url 'course_list' %}" class="btn btn-secondary mt-3">Back to Course List</a>
+    </div>
   </div>
+
+  <!-- Style for form fields -->
+  <style>
+    input[type="text"],
+    textarea,
+    input[type="file"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      transition: all 0.2s;
+      outline: none;
+    }
+    
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+    
+    input[type="file"] {
+      padding: 0.5rem;
+      background-color: #f9fafb;
+    }
+  </style>
 {% endblock %}

@@ -1,31 +1,106 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Log In</h2>
+  <div class="min-h-[600px] flex items-center justify-center">
+    <div class="w-full max-w-md">
+      <!-- Login Card -->
+      <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gradient-primary p-8 text-center text-white">
+          <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-user-lock text-4xl"></i>
+          </div>
+          <h2 class="font-display font-bold text-3xl mb-2">Welcome Back!</h2>
+          <p class="text-blue-100">Log in to continue your learning journey</p>
+        </div>
 
-  <form class="my-3" method="post" action="{% url 'login' %}">
-    {% csrf_token %}
+        <!-- Form -->
+        <div class="p-8">
+          <form method="post" action="{% url 'login' %}" class="space-y-6">
+            {% csrf_token %}
 
-    <div class="mb-3">
-      <label for="username" class="form-label">Username</label>
-      <input type="text" class="form-control" name="username" id="username" aria-describedby="username" />
+            <!-- Username Field -->
+            <div>
+              <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">
+                <i class="fas fa-user text-blue-600 mr-2"></i>Username
+              </label>
+              <input 
+                type="text" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none" 
+                name="username" 
+                id="username" 
+                placeholder="Enter your username"
+                required
+              />
+            </div>
+
+            <!-- Password Field -->
+            <div>
+              <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
+                <i class="fas fa-lock text-blue-600 mr-2"></i>Password
+              </label>
+              <input 
+                type="password" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none" 
+                name="password" 
+                id="password" 
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              class="w-full px-6 py-4 bg-gradient-primary text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              <i class="fas fa-sign-in-alt mr-2"></i>Log In
+            </button>
+          </form>
+
+          <!-- Divider -->
+          <div class="relative my-8">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="px-4 bg-white text-gray-500 font-medium">Or continue with</span>
+            </div>
+          </div>
+
+          <!-- Social Login -->
+          <div class="grid grid-cols-2 gap-3">
+            <a href="{% url 'student_google_login' %}" class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all group">
+              <i class="fab fa-google text-red-500 text-xl mr-2"></i>
+              <span class="font-medium text-gray-700 group-hover:text-gray-900">Student</span>
+            </a>
+            <a href="{% url 'instructor_google_login' %}" class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all group">
+              <i class="fab fa-google text-red-500 text-xl mr-2"></i>
+              <span class="font-medium text-gray-700 group-hover:text-gray-900">Instructor</span>
+            </a>
+          </div>
+
+          <!-- Links -->
+          <div class="mt-8 text-center space-y-3">
+            <p class="text-gray-600">Don't have an account?</p>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+              <a href="{% url 'student_signup' %}" class="inline-flex items-center justify-center px-4 py-2 text-blue-600 hover:text-blue-700 font-medium hover:bg-blue-50 rounded-lg transition-all">
+                <i class="fas fa-user-graduate mr-2"></i>Sign up as Student
+              </a>
+              <a href="{% url 'instructor_signup' %}" class="inline-flex items-center justify-center px-4 py-2 text-purple-600 hover:text-purple-700 font-medium hover:bg-purple-50 rounded-lg transition-all">
+                <i class="fas fa-chalkboard-teacher mr-2"></i>Sign up as Instructor
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back to Home -->
+      <div class="text-center mt-6">
+        <a href="{% url 'course_list' %}" class="text-gray-600 hover:text-gray-800 font-medium">
+          <i class="fas fa-arrow-left mr-2"></i>Back to Home
+        </a>
+      </div>
     </div>
-
-    <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" name="password" id="password" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-  <p>Or log in with:</p>
-  <a href="{% url 'student_google_login' %}" class="btn btn-danger">Google (Student)</a>
-  <a href="{% url 'instructor_google_login' %}" class="btn btn-danger">Google (Instructor)</a>
-  <p>Don't have an account?</p>
-  <p>
-    <a class="text-decoration-none" href="{% url 'student_signup' %}">Sign up as a Student</a>
-  </p>
-  <p>
-    <a class="text-decoration-none" href="{% url 'instructor_signup' %}">Sign up as an Instructor</a>
-  </p>
+  </div>
 {% endblock %}

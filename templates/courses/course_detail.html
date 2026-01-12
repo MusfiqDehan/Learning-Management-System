@@ -1,47 +1,167 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>{{ course.title }}</h1>
-  {% if course.thumbnail %}
-    <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" style="max-width: 400px;" />
-  {% endif %}
-  <p>{{ course.description }}</p>
-  <p>Instructor: {{ course.instructor.username }}</p>
+  <div class="max-w-6xl mx-auto">
+    <!-- Course Header -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+      <div class="grid md:grid-cols-2 gap-0">
+        <!-- Course Image -->
+        <div class="relative h-64 md:h-full bg-gradient-to-br from-blue-400 to-purple-500">
+          {% if course.thumbnail %}
+            <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="w-full h-full object-cover" />
+          {% else %}
+            <div class="w-full h-full flex items-center justify-center">
+              <i class="fas fa-book text-white text-8xl opacity-30"></i>
+            </div>
+          {% endif %}
+        </div>
 
-  {% if user.is_authenticated %}
-    {% if user == course.instructor %}
-      <a class="btn btn-warning mr-2" href="{% url 'course_update' course.pk %}">Edit Course</a>
-      <a class="btn btn-danger mr-2" href="{% url 'course_delete' course.pk %}">Delete Course</a>
-      {% if user == course.instructor %}
-        <a class="btn btn-success ml-2" href="{% url 'lesson_create' course.pk %}">Add New Lesson</a>
-      {% endif %}
-    {% elif user in course.students.all %}
-      {% if course.is_completed %}
-        <p>You completed this course on {{ course.completed_at|date:'F d, Y, h:i:s A' }}</p>
-      {% endif %}
-    {% else %}
-      <a class="btn btn-lg btn-success" href="{% url 'enroll_course' course.pk %}">Enroll</a>
-    {% endif %}
-  {% endif %}
+        <!-- Course Info -->
+        <div class="p-8">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h1 class="font-display font-bold text-3xl md:text-4xl text-gray-800 mb-4">{{ course.title }}</h1>
+              
+              <!-- Instructor Info -->
+              <div class="flex items-center mb-4">
+                <div class="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center mr-3">
+                  <span class="text-white font-bold text-lg">{{ course.instructor.username|slice:":1"|upper }}</span>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500">Instructor</p>
+                  <p class="font-semibold text-gray-800">{{ course.instructor.username }}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-yellow-100 rounded-full px-4 py-2 flex items-center">
+              <i class="fas fa-star text-yellow-500 mr-2"></i>
+              <span class="font-bold text-gray-800">4.8</span>
+            </div>
+          </div>
 
-  <h2 class="my-5">Lessons</h2>
-  <ul>
-    {% for lesson in course.lessons.all %}
-      <li>
-        <a class="fs-4" href="{% url 'lesson_detail' course.pk lesson.pk %}">{{ lesson.title }}</a>
-        {% if user == course.instructor %}
-          <a class="btn btn-warning mr-3" href="{% url 'lesson_update' course.pk lesson.pk %}">Edit</a>
-          <a class="btn btn-danger mr-3" href="{% url 'lesson_delete' course.pk lesson.pk %}">Delete</a>
-        {% elif user in course.students.all %}
-          {% for completed_lesson in completed_lessons %}
-            {% if completed_lesson.lesson == lesson %}
-              (Completed on {{ completed_lesson.completed_at|date:'F d, Y, h:i:s A' }})
+          <p class="text-gray-600 mb-6 leading-relaxed">{{ course.description }}</p>
+
+          <!-- Course Stats -->
+          <div class="grid grid-cols-2 gap-4 mb-6 p-4 bg-gray-50 rounded-xl">
+            <div>
+              <p class="text-sm text-gray-500">Total Lessons</p>
+              <p class="font-bold text-xl text-gray-800">{{ course.lessons.count }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Enrolled Students</p>
+              <p class="font-bold text-xl text-gray-800">{{ course.students.count }}</p>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          {% if user.is_authenticated %}
+            {% if user == course.instructor %}
+              <div class="flex flex-wrap gap-3">
+                <a href="{% url 'course_update' course.pk %}" class="flex-1 px-6 py-3 bg-yellow-500 text-white rounded-xl font-semibold hover:bg-yellow-600 transition-colors text-center">
+                  <i class="fas fa-edit mr-2"></i>Edit Course
+                </a>
+                <a href="{% url 'course_delete' course.pk %}" class="flex-1 px-6 py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-colors text-center">
+                  <i class="fas fa-trash mr-2"></i>Delete
+                </a>
+              </div>
+              <a href="{% url 'lesson_create' course.pk %}" class="block w-full mt-3 px-6 py-3 bg-gradient-primary text-white rounded-xl font-semibold hover:shadow-lg transition-all text-center">
+                <i class="fas fa-plus-circle mr-2"></i>Add New Lesson
+              </a>
+            {% elif user in course.students.all %}
+              {% if course.is_completed %}
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-xl">
+                  <div class="flex items-center">
+                    <i class="fas fa-check-circle text-green-500 text-2xl mr-3"></i>
+                    <div>
+                      <p class="font-semibold text-green-800">Course Completed!</p>
+                      <p class="text-sm text-green-600">Completed on {{ course.completed_at|date:'F d, Y, h:i A' }}</p>
+                    </div>
+                  </div>
+                </div>
+              {% else %}
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-xl">
+                  <div class="flex items-center">
+                    <i class="fas fa-graduation-cap text-blue-500 text-2xl mr-3"></i>
+                    <p class="font-semibold text-blue-800">You are enrolled in this course</p>
+                  </div>
+                </div>
+              {% endif %}
+            {% else %}
+              <a href="{% url 'enroll_course' course.pk %}" class="block w-full px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-bold text-lg hover:shadow-2xl transition-all text-center">
+                <i class="fas fa-user-plus mr-2"></i>Enroll Now
+              </a>
             {% endif %}
-          {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Lessons Section -->
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="font-display font-bold text-3xl text-gray-800">
+          <i class="fas fa-list-ul text-blue-600 mr-3"></i>Course Lessons
+        </h2>
+        {% if user == course.instructor %}
+          <a href="{% url 'lesson_create' course.pk %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+            <i class="fas fa-plus mr-2"></i>Add Lesson
+          </a>
         {% endif %}
-      </li>
-    {% empty %}
-      <li>No lessons available for this course.</li>
-    {% endfor %}
-  </ul>
+      </div>
+
+      {% if course.lessons.all %}
+        <div class="space-y-3">
+          {% for lesson in course.lessons.all %}
+            <div class="group border border-gray-200 rounded-xl p-5 hover:border-blue-300 hover:shadow-md transition-all">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <a href="{% url 'lesson_detail' course.pk lesson.pk %}" class="block">
+                    <h3 class="font-bold text-lg text-gray-800 group-hover:text-blue-600 transition-colors mb-2">
+                      <i class="fas fa-play-circle text-blue-500 mr-2"></i>{{ lesson.title }}
+                    </h3>
+                  </a>
+                  
+                  {% if user in course.students.all %}
+                    {% for completed_lesson in completed_lessons %}
+                      {% if completed_lesson.lesson == lesson %}
+                        <div class="inline-flex items-center bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm mt-2">
+                          <i class="fas fa-check-circle mr-2"></i>
+                          Completed on {{ completed_lesson.completed_at|date:'M d, Y' }}
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                </div>
+
+                {% if user == course.instructor %}
+                  <div class="flex gap-2 ml-4">
+                    <a href="{% url 'lesson_update' course.pk lesson.pk %}" class="px-3 py-2 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition-colors">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="{% url 'lesson_delete' course.pk lesson.pk %}" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-center py-12">
+          <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-folder-open text-gray-400 text-3xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-700 mb-2">No Lessons Yet</h3>
+          <p class="text-gray-500">This course doesn't have any lessons yet.</p>
+          {% if user == course.instructor %}
+            <a href="{% url 'lesson_create' course.pk %}" class="inline-block mt-4 px-6 py-3 bg-gradient-primary text-white rounded-xl font-semibold hover:shadow-lg transition-all">
+              Create First Lesson
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
