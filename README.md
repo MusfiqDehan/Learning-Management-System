@@ -8,8 +8,11 @@
 
 <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue">
 <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green">
-<img src="https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white">
-<img src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white">
+<img src="https://img.shields.io/badge/Postgres-336791?style=for-the-badge&logo=postgresql&logoColor=white">
+<a href="https://neon.com/" target="_blank" rel="noopener noreferrer">
+   <img src="https://img.shields.io/badge/Neon-0EA5A4?style=for-the-badge&logo=neon&logoColor=white" alt="Neon">
+</a>
+<img src="https://img.shields.io/badge/Tailwind-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white">
 
 </div>
 
@@ -37,7 +40,7 @@ This Django application provides functionality for managing courses, lessons, an
 
 -   **Frontend:** HTML5, CSS3, Bootstrap5
 -   **Backend:** Python=3.12.3, Django=5.0.6
--   **Database:** SQLite3
+-   **Database:** PostgreSQL, Neon
 -   **Version Control:** Git, GitHub
 -   **Editor:** VS Code
 -   **Operating System:** Ubuntu 24.04 LTS
@@ -47,34 +50,35 @@ This Django application provides functionality for managing courses, lessons, an
 #### Installation Steps
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/musfiqdehan/OnlineLearningPlatform.git
+   git clone https://github.com/MusfiqDehan/Learning-Management-System.git
    cd your-project
    ```
 
-2. **Create a virtual environment:**
+2. **Create a virtual environment using UV:**
    ```bash
-   python -m venv .venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   uv venv .venv
+   source .venv/bin/activate  # On Windows use `venv\Scripts\activate`
    ```
 
 3. **Install dependencies:**
    ```bash
-   pip install -r requirements.txt
+   uv pip install -r requirements.txt
    ```
 
 4. **Run database migrations:**
    ```bash
-   python manage.py migrate
+   python3 manage.py makemigrations
+   python3 manage.py migrate
    ```
 
 5. **Create a superuser:**
    ```bash
-   python manage.py createsuperuser
+   python3 manage.py createsuperuser
    ```
 
 6. **Run the development server:**
    ```bash
-   python manage.py runserver
+   python3 manage.py runserver
    ```
 
 ### Configuration

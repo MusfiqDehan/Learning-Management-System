@@ -1,1 +1,1 @@
-web: gunicorn OnlineLearningPlatform.wsgi
+web: gunicorn config.wsgi

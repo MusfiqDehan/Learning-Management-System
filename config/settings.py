@@ -1,7 +1,13 @@
 import os
+from django.core.exceptions import ImproperlyConfigured
 from pathlib import Path
+import dj_database_url
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from .env (if present)
+load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -12,6 +18,14 @@ CSRF_TRUSTED_ORIGINS = ["https://online-learning-platform.musfiqdehan.com"]
 
 DEBUG = os.getenv("DEBUG", default=True)
 
+# Ensure SECRET_KEY is set; provide a clearly-insecure fallback for local dev only.
+# In production ensure `SECRET_KEY` is provided via environment variables.
+if not SECRET_KEY:
+    if DEBUG in (True, "True", "1", "true"):
+        SECRET_KEY = "insecure-dev-secret-change-me"
+    else:
+        raise ImproperlyConfigured("The SECRET_KEY setting must not be empty. Set the SECRET_KEY environment variable.")
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -21,10 +35,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "courses",
     "accounts",
     "storages",
-    "django.contrib.sites",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -43,7 +57,7 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
-ROOT_URLCONF = "OnlineLearningPlatform.urls"
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
@@ -61,29 +75,16 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "OnlineLearningPlatform.wsgi.application"
+WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-# For production
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
-    },
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL')
+    )
 }
 
 # AWS S3 settings
@@ -163,10 +164,12 @@ AUTHENTICATION_BACKENDS = (
 
 
 # Add any other allauth settings you need
-ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+# Newer allauth configuration (replaces deprecated ACCOUNT_* flags)
+# Allow login by username and email (equivalent to the old "username_email")
+ACCOUNT_LOGIN_METHODS = {"username", "email"}
+# Define the signup fields and mark required ones with a trailing '*'
+ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_PROVIDERS = {
@@ -211,7 +214,9 @@ LOGGING = {
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_DIR = BASE_DIR / "static"
+os.makedirs(STATIC_DIR, exist_ok=True)
+STATICFILES_DIRS = [STATIC_DIR]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
