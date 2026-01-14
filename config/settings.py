@@ -15,6 +15,10 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="*").split(",")
 
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", default="*").split(",")
 
+# Trust the "X-Forwarded-Proto" header coming from the proxy (Nginx).
+# This tells Django to treat the request as secure (HTTPS) if Nginx says it is.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 
 DEBUG = os.getenv("DEBUG", default=True)
 
