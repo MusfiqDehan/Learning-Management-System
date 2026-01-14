@@ -16,7 +16,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends curl build-essential \
     && curl -LsSf https://astral.sh/uv/install.sh | sh \
     && export PATH="/root/.local/bin:$PATH" \
-    && uv upgrade \
+    && uv self update \
     && uv pip install --system --no-cache -r requirements.txt \
     && apt-get purge -y curl build-essential \
     && apt-get autoremove -y \
