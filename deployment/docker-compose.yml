@@ -1,5 +1,6 @@
 services:
   web:
+    image: ghcr.io/musfiqdehan/lms-web:latest
     build:
       context: ..
       dockerfile: deployment/Dockerfile
