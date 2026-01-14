@@ -58,8 +58,12 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd /srv/apps/lms.musfiqdehan.com
+
+            # Checkout to main branch
+            git checkout -f main
             
             # Pull latest code
             git pull origin main
