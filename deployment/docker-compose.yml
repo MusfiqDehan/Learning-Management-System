@@ -1,0 +1,50 @@
+services:
+  web:
+    image: ghcr.io/musfiqdehan/lms-web:latest
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8003
+    volumes:
+      - ..:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    expose:
+      - 8003
+    env_file:
+      - ../.env
+    depends_on:
+      - db
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8003/" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  db:
+    image: postgres:17
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5435:5432"
+    env_file:
+      - ../.env
+
+  nginx:
+    image: nginx:1.25-alpine
+    restart: always
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "${WEB_PORT:-80}:80"
+    depends_on:
+      web:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

@@ -13,7 +13,11 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="*").split(",")
 
-CSRF_TRUSTED_ORIGINS = ["https://online-learning-platform.musfiqdehan.com"]
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", default="*").split(",")
+
+# Trust the "X-Forwarded-Proto" header coming from the proxy (Nginx).
+# This tells Django to treat the request as secure (HTTPS) if Nginx says it is.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 DEBUG = os.getenv("DEBUG", default=True)
@@ -87,18 +91,30 @@ DATABASES = {
     )
 }
 
-# AWS S3 settings
-STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-    },
-    "staticfiles": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-    },
-    "mediafiles": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-    },
-}
+# S3 Settings
+USE_S3 = os.getenv("USE_S3") == "True"
+
+if USE_S3:
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+        },
+        "staticfiles": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+        },
+        "mediafiles": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
 
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", default=None)
 
