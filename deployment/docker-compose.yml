@@ -32,7 +32,7 @@ services:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     ports:
-      - "8080:8003"
+      - "${WEB_PORT:-80}:8003"
     depends_on:
       - web
 
