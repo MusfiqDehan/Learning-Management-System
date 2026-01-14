@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>Learning Management System</h1>
+<h1>Learning Management System - LMS</h1>
 
 <p>A Learning Management System Where Teachers Can Create Different Courses and Students Can Enroll In Different Courses</p>
 
