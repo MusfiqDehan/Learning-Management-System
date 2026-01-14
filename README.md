@@ -1,8 +1,8 @@
 <div align="center">
 
-<h1>Online Learning Platform</h1>
+<h1>Learning Management System</h1>
 
-<p>An Online Learning Platform Where Teachers Can Create Different Courses and Students Can Enroll In Different Courses</p>
+<p>A Learning Management System Where Teachers Can Create Different Courses and Students Can Enroll In Different Courses</p>
 
 <br>
 
