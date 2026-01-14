@@ -14,9 +14,9 @@ COPY requirements.txt /app/
 # Copy uv from the official image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Install build dependencies, install requirements via uv, then cleanup
+# Install curl (for healthcheck) + build dependencies, install requirements via uv, then cleanup build deps
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends build-essential \
+    && apt-get install -y --no-install-recommends curl build-essential \
     && uv pip install --system --no-cache -r requirements.txt \
     && apt-get purge -y build-essential \
     && apt-get autoremove -y \
@@ -29,4 +29,4 @@ COPY . /app/
 # RUN python manage.py collectstatic --noinput
 
 # Run gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8003", "config.wsgi:application"]
