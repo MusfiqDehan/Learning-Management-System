@@ -87,18 +87,30 @@ DATABASES = {
     )
 }
 
-# AWS S3 settings
-STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-    },
-    "staticfiles": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-    },
-    "mediafiles": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-    },
-}
+# S3 Settings
+USE_S3 = os.getenv("USE_S3") == "True"
+
+if USE_S3:
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+        },
+        "staticfiles": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+        },
+        "mediafiles": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
 
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", default=None)
 
