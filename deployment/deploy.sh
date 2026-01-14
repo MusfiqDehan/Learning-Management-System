@@ -7,7 +7,7 @@ cd "$(dirname "$0")/.."
 echo "Deploying..."
 
 # Pull latest code
-git pull origin main
+git pull origin dev
 
 # Build and start containers
 docker compose -f deployment/docker-compose.yml up -d --build
