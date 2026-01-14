@@ -12,9 +12,6 @@ git pull origin dev
 # Build and start containers
 docker compose -f deployment/docker-compose.yml up -d --build
 
-# Run makemigrations
-docker compose -f deployment/docker-compose.yml exec web python manage.py makemigrations
-
 # Run migrations
 docker compose -f deployment/docker-compose.yml exec web python manage.py migrate
 
