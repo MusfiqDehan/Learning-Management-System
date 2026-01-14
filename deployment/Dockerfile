@@ -11,12 +11,14 @@ WORKDIR /app
 # Copy requirements.txt first
 COPY requirements.txt /app/
 
-# Install curl + build deps, then uv
+# Copy uv from the official image
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Install build dependencies, install requirements via uv, then cleanup
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl build-essential \
-    && curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && apt-get install -y --no-install-recommends build-essential \
     && uv pip install --system --no-cache -r requirements.txt \
-    && apt-get purge -y curl build-essential \
+    && apt-get purge -y build-essential \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
