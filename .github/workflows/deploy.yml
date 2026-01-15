@@ -60,7 +60,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            cd /srv/apps/lms.musfiqdehan.com
+            # Change directory to the app path
+            cd ${{ secrets.APP_PATH }}
 
             # Checkout to main branch
             git checkout -f main
@@ -68,7 +69,7 @@ jobs:
             # Pull latest code
             git pull origin main
             
-            # Login to GHCR (optional if images are public, but good practice)
+            # Login to GHCR
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             
             # Pull the latest image
