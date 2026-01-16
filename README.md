@@ -51,7 +51,7 @@ This Django application provides functionality for managing courses, lessons, an
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/MusfiqDehan/Learning-Management-System.git
-   cd your-project
+   cd Learning-Management-System
    ```
 
 2. **Create a virtual environment using UV:**
