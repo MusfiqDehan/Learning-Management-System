@@ -8,11 +8,14 @@ class Course(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     instructor = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='courses_taught')
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="courses_taught",
+    )
     students = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name='courses_enrolled', blank=True)
-    thumbnail = models.ImageField(
-        upload_to='course_thumbnails/', null=True, blank=True)
+        settings.AUTH_USER_MODEL, related_name="courses_enrolled", blank=True
+    )
+    thumbnail = models.ImageField(upload_to="course_thumbnails/", null=True, blank=True)
     is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -21,7 +24,8 @@ class Course(models.Model):
     def update_completion_status(self, student):
         all_lessons = self.lessons.all()
         completed_lessons = self.lessons.filter(
-            progress__completed=True, progress__student=student)
+            progress__completed=True, progress__student=student
+        )
         if all_lessons.count() > 0 and all_lessons.count() == completed_lessons.count():
             self.is_completed = True
             self.completed_at = timezone.now()
@@ -41,18 +45,16 @@ class Course(models.Model):
 
 
 class Lesson(models.Model):
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name='lessons')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="lessons")
     title = models.CharField(max_length=200)
     content = models.TextField()
     order = models.IntegerField(default=0)
-    thumbnail = models.ImageField(
-        upload_to='lesson_thumbnails/', null=True, blank=True)
+    thumbnail = models.ImageField(upload_to="lesson_thumbnails/", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['order']
+        ordering = ["order"]
 
     def __str__(self):
         return f"{self.course.title} - {self.title}"
@@ -65,14 +67,13 @@ class Lesson(models.Model):
 
 
 class Progress(models.Model):
-    student = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
     completed_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
-        unique_together = ('student', 'lesson')
+        unique_together = ("student", "lesson")
 
     def __str__(self):
         return f"{self.student.username} - {self.lesson.title}"

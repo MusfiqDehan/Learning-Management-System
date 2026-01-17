@@ -2,16 +2,13 @@ import logging
 from django.contrib.auth import login
 from django.urls import reverse
 from django.shortcuts import redirect
-from django.contrib.auth import login, logout
+from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy, reverse
-from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.shortcuts import render
 from django.contrib import messages
-from django.conf import settings
-from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 
 from .forms import StudentSignUpForm, InstructorSignUpForm
-from .models import User
 
 logger = logging.getLogger(__name__)
 
